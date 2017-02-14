@@ -65,9 +65,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Note.h" />
+    <ClInclude Include="NoteSeries.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp" />
+    <ClCompile Include="NoteSeries.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

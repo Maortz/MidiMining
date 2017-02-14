@@ -1,17 +1,20 @@
 #pragma once
 class Note
 {
+public:
+
 	unsigned int m_semitones;
 	unsigned int m_duration;
-public:
+	double m_bar_position;
+	double m_start_position;
+
 	Note();
 	~Note();
 
-	void set_semitones(unsigned int note);
-	unsigned int get_semitones();
-	void set_duration(unsigned int note);
-	unsigned int get_duration();
+	double endBarPosition();
+	double endstartPosition();
+	
+	static int getInterval(Note note1, Note note2);
 
-	static int GetInterval(Note note1, Note note2);
 };
 
