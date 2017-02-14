@@ -7,6 +7,8 @@ class NoteSeries
 	
 public:
 	std::vector<Note*> notes;
+	unsigned int instrument_type;
+	unsigned int scale;
 
 	NoteSeries();
 	~NoteSeries();

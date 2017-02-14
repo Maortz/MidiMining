@@ -13,9 +13,7 @@ public:
 
 	double endBarPosition();
 	double endStartPosition();
-	/*
-	Gets: Allocated with 3 chars (last for \0, "A#\0")
-	*/
+	// pre-allocate 3 chars
 	void noteSign(char* buff);
 	int octaveFromMiddle();
 
