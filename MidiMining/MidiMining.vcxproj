@@ -64,10 +64,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MidiParser.h" />
+    <ClInclude Include="MidiReader.h" />
     <ClInclude Include="Note.h" />
     <ClInclude Include="NoteSeries.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MidiParser.cpp" />
+    <ClCompile Include="MidiReader.cpp" />
     <ClCompile Include="Note.cpp" />
     <ClCompile Include="NoteSeries.cpp" />
   </ItemGroup>
