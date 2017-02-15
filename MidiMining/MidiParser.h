@@ -7,12 +7,22 @@ class MidiParser
 
 	class TrackEvent
 	{
-		unsigned int delta_time;
+
+		int m_buff_len;
+		bool m_is_valid;
+	public:
+		unsigned int m_delta_time;
 		// midi_event:  status, 0x80 - 0xEF
 		// meta_event:  0xFF
 		// sysex_event: 0xF0
-		char status;
-		char* data;
+		char m_status;
+		char* m_data;
+		//
+		// Set all in the Ctor
+		TrackEvent(char* buff);
+		~TrackEvent();
+		inline bool isValid() { return m_is_valid; }
+		inline int get_buff_len() { return m_buff_len; }
 	};
 	struct TrackChunk
 	{
@@ -27,13 +37,22 @@ class MidiParser
 		short format;
 		short number_of_tracks;
 		short division;
+		char* data;
 	};
 	HeaderChunk* m_header_chunk;
-	TrackChunk* m_track_chunk;
 	unsigned int m_track_count;
-	TrackEvent* m_track_event;
+	TrackChunk** m_track_chunk;
 	unsigned int **m_events_count;
+	TrackEvent*** m_track_event;
+	short m_channels;
 	bool m_is_valid;
+
+	bool Destroy();
+	bool headerIsValid();
+	bool trackIsValid(int i);
+
+	const int m_mini_event_bytes = 4;
+	void shrinkTrackEventArray(int i);
 public:
 
 	const char ShortBits[] = {
@@ -60,7 +79,7 @@ public:
 
 	bool isValid();
 	bool parseIt();
-	short getChannels();
+	short get_channels();
 	bool getNotes(NoteSeries* notes, int channel);
 
 };
