@@ -25,7 +25,11 @@ MidiParser::Midi::Midi(char *midi_buff)
 
 MidiParser::Midi::~Midi()
 {
-
+	int count = get_track_count();
+	for (size_t i = 0; i < count; i++)
+		if (!m_track[i])
+			delete m_track[i];
+	delete m_track;
 }
 
 MidiParser::Track::Track(char *track_buff)
@@ -48,23 +52,23 @@ bool MidiParser::Track::parse()
 	while (inc_len < m_track_chunk->track_length)
 	{
 		m_event[m_events_count] = new Event(m_track_chunk->data + inc_len);
-		if (!m_event[m_events_count]->m_is_valid)
-		{
-			for (size_t j = 0; j <= m_events_count; j++)
-				delete m_event[j];
-			delete[] m_event;
-			return false;
-		}
 		inc_len += m_event[m_events_count]->m_buff_len;
-		++m_events_count;
+		if (!m_event[m_events_count]->m_is_valid)
+			delete m_event[m_events_count];
+		else
+			++m_events_count;
 	}
+	if (m_events_count == 0)
+		return false;
 	m_is_valid = true;
 	return true;
 }
 
 MidiParser::Track::~Track()
 {
-
+	for (size_t i = 0; i < m_events_count; i++)
+		delete m_event[i];
+	delete[] m_event;
 }
 
 MidiParser::MetaEvent::MetaEvent(char* buff, int &len) : EventI()
@@ -111,7 +115,7 @@ MidiParser::SysexEvent::SysexEvent(char *buff, int &len) : EventI()
 	m_is_valid = true;
 }
 
-MidiParser::MidiEvent::MidiEvent(char *buff, char status, int &len) : EventI()
+MidiParser::MidiEvent::MidiEvent(char *buff, char status, int &len) : EventI(), m_details(0)
 {
 	m_channel = 0x1 << ((status & 0x0F) - 1);
 	// Note's channels
@@ -151,9 +155,16 @@ MidiParser::MidiEvent::MidiEvent(char *buff, char status, int &len) : EventI()
 	if (!m_details->m_is_valid)
 	{
 		delete m_details;
+		m_details = 0;
 		return;
 	}
 	m_is_valid = true;
+}
+
+MidiParser::MidiEvent::~MidiEvent()
+{
+	if (!m_details)
+		delete m_details;
 }
 
 MidiParser::SymbolsEvent::SymbolsEvent(char symbol, char value, int &len) : EventI2()
@@ -182,10 +193,8 @@ MidiParser::SymbolsEvent::SymbolsEvent(char symbol, char value, int &len) : Even
 	}
 }
 
-MidiParser::Event::Event(char *event_buff)
+MidiParser::Event::Event(char *event_buff) : m_event_details(0), m_is_valid(false)
 {
-	m_is_valid = false;
-	//
 	char *buff = event_buff;
 	int delta_time_len = 0, event_len = 0;
 	m_delta_time = calcLength(buff, delta_time_len);
@@ -210,36 +219,41 @@ MidiParser::Event::Event(char *event_buff)
 		m_event_details = new MidiEvent(buff, m_status, event_len);
 		break;
 	}
+	m_buff_len = event_len + 1 + delta_time_len;
 	if (!m_event_details->m_is_valid)
 	{
 		delete m_event_details;
+		m_event_details = 0;
 		return;
 	}
-	m_buff_len = event_len + 1 + delta_time_len;
 	m_is_valid = true;
 }
 
 MidiParser::Event::~Event()
 {
-
+	if (!m_event_details)
+		delete m_event_details;
 }
 
 bool MidiParser::Midi::parse()
 {
 	m_is_valid = false;
 	int inc_len = 0;
-	for (size_t i = 0; i < get_track_count(); i++)
+	int i, j;
+	int count = get_track_count();
+	for (i = j = 0; i < count; i++)
 	{
 		m_track[i] = new Track(m_header_chunk->data + inc_len);
 		if (!m_track[i]->m_is_valid)
 		{
-			for (size_t j = 0; j <= i; j++)
-				delete m_track[j];
-			delete[] m_track;
-			return false;
+			delete m_track[i];
+			m_track = 0;
+			j++;
 		}
 		inc_len += 8 + m_track[i]->get_trank_length();
 	}
+	if (i == j)
+		return false;
 	m_is_valid = true;
 	return true;
 }
