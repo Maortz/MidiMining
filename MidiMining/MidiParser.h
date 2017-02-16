@@ -37,6 +37,7 @@ class MidiParser
 	class NoteEvent : public EventI2
 	{
 	public:
+		// TODO: impl
 		NoteEvent(char note, char velocity);
 		~NoteEvent();
 
@@ -200,6 +201,7 @@ class MidiParser
 	class ProgramEvent : public EventI2
 	{
 	public:
+		// TODO: impl
 		ProgramEvent(char value);
 		~ProgramEvent();
 
@@ -296,7 +298,9 @@ class MidiParser
 		Event(char* event_buff);
 		~Event();
 		bool parse();
+		// TODO: impl
 		static int calcLength(char* time_buff, int &read_bytes);
+		// TODO: impl
 		void set_status(char status);
 
 		bool m_is_valid;
@@ -330,8 +334,10 @@ class MidiParser
 		
 		TrackChunk* m_track_chunk;
 		unsigned int m_events_count;
-		
+
+		// TODO: impl
 		void shrinkTrackEventArray();
+		// TODO: impl
 		bool isValid();
 	};
 

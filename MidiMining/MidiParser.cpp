@@ -1,7 +1,7 @@
 #include "MidiParser.h"
 #include <string.h>
 
-MidiParser::MidiParser(char* midi, int len)
+MidiParser::MidiParser(char* midi, int len) : m_channels(0)
 {
 	m_midi_buff = new char[len];
 	memcpy(m_midi_buff, midi, len);
@@ -10,6 +10,7 @@ MidiParser::MidiParser(char* midi, int len)
 
 MidiParser::~MidiParser()
 {
+	delete m_midi_buff;
 }
 
 MidiParser::Midi::Midi(char *midi_buff)
