@@ -22,14 +22,22 @@ class MidiParser
 	};
 
 	class EventI
-	{};
+	{
+	public:
+		EventI() : m_is_valid(false) {}
+		bool m_is_valid;
+	};
 	class EventI2
-	{};
+	{
+	public:
+		EventI2() : m_is_valid(false) {}
+		bool m_is_valid;
+	};
 
 	class NoteEvent : public EventI2
 	{
 	public:
-		NoteEvent();
+		NoteEvent(char note, char velocity);
 		~NoteEvent();
 
 		Note m_note;
@@ -192,41 +200,73 @@ class MidiParser
 	class ProgramEvent : public EventI2
 	{
 	public:
-		ProgramEvent();
+		ProgramEvent(char value);
 		~ProgramEvent();
 
-
+		Instruments m_instrument;
+		InstrumentFamiles m_instrument_family;
 	private:
 
+	};
+
+	enum Symbol
+	{
+		None,
+		Damper_Pedal = 0x40,
+		Portamento,
+		Sostenuto,
+		Soft_Pedal,
+		Legato
 	};
 
 	class SymbolsEvent : public EventI2
 	{
 	public:
-		SymbolsEvent();
+		SymbolsEvent(char symbol, char value, int &len);
 		~SymbolsEvent();
 
+		Symbol m_symbol;
+		char m_value;
 	private:
 
+	};
+
+	enum Event2Type
+	{
+		Note_Event,
+		Program_Event,
+		Symbol_Event
 	};
 
 	class MidiEvent : public EventI
 	{
 	public:
-		MidiEvent();
+		MidiEvent(char* buff, char status, int &len);
 		~MidiEvent();
 
-		char m_channel;
+		short m_channel;
 		EventI2* m_details;
+		Event2Type m_type;
 	private:
 
+	};
+
+	enum MetaTypes
+	{
+		EOT = 0x2F00,
+		Tempo = 0x5103,
+		Time_Sign = 0x5804,
+		Key_Sign = 0x5902
 	};
 
 	class MetaEvent : public EventI
 	{
 	public:
-		MetaEvent();
+		MetaEvent(char* buff, int &len);
 		~MetaEvent();
+
+		MetaTypes m_type;
+		char m_value[4];
 
 	private:
 
@@ -235,7 +275,7 @@ class MidiParser
 	class SysexEvent : public EventI
 	{
 	public:
-		SysexEvent();
+		SysexEvent(char* buff, int &len);
 		~SysexEvent();
 
 	private:
@@ -244,33 +284,34 @@ class MidiParser
 
 	enum EventType
 	{
-		MidiEvent,
-		MetaEvent,
-		SysexEvent
+		Meta_Event = 0xFF,
+		Sysex_Event1 = 0xF0,
+		Sysex_Event2 = 0xF7,
+		Midi_Event
 	};
 
 	class Event
 	{
 	public:
-		//
-		// Set all in the Ctor
 		Event(char* event_buff);
 		~Event();
 		bool parse();
-		void set_delta_time();
-		void set_status();
-		inline int get_buff_len() { return m_buff_len; }
+		static int calcLength(char* time_buff, int &read_bytes);
+		void set_status(char status);
 
 		bool m_is_valid;
+		int m_buff_len;
+		
 		unsigned int m_delta_time;
 		// midi_event:  status, 0x80 - 0xEF
 		// meta_event:  0xFF
 		// sysex_event: 0xF0
 		char m_status;
+
 		EventI* m_event_details;
-		EventType type;
+		EventType m_type;
+
 	private:
-		int m_buff_len;
 	};
 
 	class Track
@@ -316,7 +357,7 @@ class MidiParser
 
 public:
 
-	const char ShortBits[] = {
+	const char c_short_bits[] = {
 		0x0001,
 		0x0002,
 		0x0004,
