@@ -64,16 +64,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="MetaEvent.h" />
+    <ClInclude Include="Midi.h" />
+    <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiParser.h" />
     <ClInclude Include="MidiReader.h" />
     <ClInclude Include="Note.h" />
+    <ClInclude Include="NoteEvent.h" />
     <ClInclude Include="NoteSeries.h" />
+    <ClInclude Include="ProgramEvent.h" />
+    <ClInclude Include="SymbolEvent.h" />
+    <ClInclude Include="SysexEvent.h" />
+    <ClInclude Include="Track.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="MetaEvent.cpp" />
+    <ClCompile Include="Midi.cpp" />
+    <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiParser.cpp" />
     <ClCompile Include="MidiReader.cpp" />
     <ClCompile Include="Note.cpp" />
+    <ClCompile Include="NoteEvent.cpp" />
     <ClCompile Include="NoteSeries.cpp" />
+    <ClCompile Include="ProgramEvent.cpp" />
+    <ClCompile Include="SymbolEvent.cpp" />
+    <ClCompile Include="SysexEvent.cpp" />
+    <ClCompile Include="Track.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
