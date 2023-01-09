@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/MidiMining/static/css/main.073c9b0a.css",
+    "main.js": "/MidiMining/static/js/main.770574b2.js",
+    "static/js/787.ed740343.chunk.js": "/MidiMining/static/js/787.ed740343.chunk.js",
+    "static/media/logo.svg": "/MidiMining/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/MidiMining/index.html",
+    "main.073c9b0a.css.map": "/MidiMining/static/css/main.073c9b0a.css.map",
+    "main.770574b2.js.map": "/MidiMining/static/js/main.770574b2.js.map",
+    "787.ed740343.chunk.js.map": "/MidiMining/static/js/787.ed740343.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.770574b2.js"
+  ]
+}
